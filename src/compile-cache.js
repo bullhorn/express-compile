@@ -23,10 +23,13 @@ export default class CompileCache {
    *
    * @param  {FileChangedCache} fileChangeCache  A file-change cache that is
    *                                             optionally pre-loaded.
+   *
+   * @param  {boolean} ignoreStyleCache  (optional) flag to disable caching of style files
    */
-  constructor(cachePath, fileChangeCache) {
+  constructor(cachePath, fileChangeCache, ignoreStyleCache = false) {
     this.cachePath = cachePath;
     this.fileChangeCache = fileChangeCache;
+    this.ignoreStyleCache = ignoreStyleCache;
   }
 
   /**
@@ -48,7 +51,7 @@ export default class CompileCache {
    *
    * @return {CompileCache}  A configured CompileCache instance.
    */
-  static createFromCompiler(cachePath, compiler, fileChangeCache, readOnlyMode = false) {
+  static createFromCompiler(cachePath, compiler, fileChangeCache, readOnlyMode = false, ignoreStyleCache = false) {
     let newCachePath = null;
     let getCachePath = () => {
       if (newCachePath) return newCachePath;
@@ -68,7 +71,7 @@ export default class CompileCache {
       return newCachePath;
     };
 
-    let ret = new CompileCache('', fileChangeCache);
+    let ret = new CompileCache('', fileChangeCache, ignoreStyleCache);
     ret.getCachePath = getCachePath;
 
     return ret;
@@ -145,18 +148,22 @@ export default class CompileCache {
    * @return {Promise}  Completion.
    */
   async save(hashInfo, codeOrBinaryData, mimeType, dependentFiles) {
-    let buf = null;
-    let target = path.join(this.getCachePath(), hashInfo.hash);
-    d(`Saving to ${target}`);
+    // Don't save if we ignore style caching and the mimeType is a style
+    let shouldNotSave = this.ignoreStyleCache && mimeType === 'text/css';
+    if (!shouldNotSave) {
+      let buf = null;
+      let target = path.join(this.getCachePath(), hashInfo.hash);
+      d(`Saving to ${target}`);
 
-    if (hashInfo.isFileBinary) {
-      buf = await pzlib.gzip(codeOrBinaryData);
-      await pfs.writeFile(target + '.info', JSON.stringify({mimeType, dependentFiles}), 'utf8');
-    } else {
-      buf = await pzlib.gzip(new Buffer(JSON.stringify({code: codeOrBinaryData, mimeType, dependentFiles})));
+      if (hashInfo.isFileBinary) {
+        buf = await pzlib.gzip(codeOrBinaryData);
+        await pfs.writeFile(target + '.info', JSON.stringify({mimeType, dependentFiles}), 'utf8');
+      } else {
+        buf = await pzlib.gzip(new Buffer(JSON.stringify({code: codeOrBinaryData, mimeType, dependentFiles})));
+      }
+
+      await pfs.writeFile(target, buf);
     }
-
-    await pfs.writeFile(target, buf);
   }
 
   /**
@@ -239,18 +246,22 @@ export default class CompileCache {
   }
 
   saveSync(hashInfo, codeOrBinaryData, mimeType, dependentFiles) {
-    let buf = null;
-    let target = path.join(this.getCachePath(), hashInfo.hash);
-    d(`Saving to ${target}`);
+    // Don't save if we ignore style caching and the mimeType is a style
+    let shouldNotSave = this.ignoreStyleCache && mimeType === 'text/css';
+    if (!shouldNotSave) {
+      let buf = null;
+      let target = path.join(this.getCachePath(), hashInfo.hash);
+      d(`Saving to ${target}`);
 
-    if (hashInfo.isFileBinary) {
-      buf = zlib.gzipSync(codeOrBinaryData);
-      fs.writeFileSync(target + '.info', JSON.stringify({mimeType, dependentFiles}), 'utf8');
-    } else {
-      buf = zlib.gzipSync(new Buffer(JSON.stringify({code: codeOrBinaryData, mimeType, dependentFiles})));
+      if (hashInfo.isFileBinary) {
+        buf = zlib.gzipSync(codeOrBinaryData);
+        fs.writeFileSync(target + '.info', JSON.stringify({mimeType, dependentFiles}), 'utf8');
+      } else {
+        buf = zlib.gzipSync(new Buffer(JSON.stringify({code: codeOrBinaryData, mimeType, dependentFiles})));
+      }
+
+      fs.writeFileSync(target, buf);
     }
-
-    fs.writeFileSync(target, buf);
   }
 
   getOrFetchSync(filePath, fetcher) {

@@ -3,15 +3,16 @@ import path from 'path';
 import mkdirp from 'mkdirp';
 import _ from 'lodash';
 import minimatch from 'minimatch';
-import { createCompilerHostFromProjectRootSync } from './config-parser';
+import {createCompilerHostFromProjectRootSync} from './config-parser';
+import chalk from 'chalk';
 
-function buildWithBuiltIn(root, source) {
+function buildWithBuiltIn(root, source, ignoreStyleCache) {
   let compilerHost = null;
   let rootCacheDir = path.join(root, '.cache');
   mkdirp.sync(rootCacheDir);
 
   try {
-    compilerHost = createCompilerHostFromProjectRootSync(root, rootCacheDir);
+    compilerHost = createCompilerHostFromProjectRootSync(root, rootCacheDir, ignoreStyleCache);
   } catch (e) {
     console.error(`Couldn't set up compilers: ${e.message}`);
     throw e;
@@ -29,8 +30,17 @@ function buildWithBuiltIn(root, source) {
   });
 }
 
+let translations = {
+  less: ['Content-Type', 'text/css; charset=utf-8'],
+  sass: ['Content-Type', 'text/css; charset=utf-8'],
+  scss: ['Content-Type', 'text/css; charset=utf-8'],
+  js: ['Content-Type', 'application/javascript; charset=utf-8'],
+  ts: ['Content-Type', 'application/javascript; charset=utf-8'],
+  coffee: ['Content-Type', 'application/javascript; charset=utf-8']
+};
+
 export function Compiler(options = {}) {
-  let {root, paths, ignore, cwd} = options;
+  let {root, paths, ignore, cwd, ignoreStyleCache} = options;
 
   return function (request, response, next) {
     if ('GET' != request.method.toUpperCase() && 'HEAD' != request.method.toUpperCase()) {
@@ -49,9 +59,9 @@ export function Compiler(options = {}) {
         });
 
       if (ext && ext.length && check && !ignored) {
-        console.log(`Compiling ${filepath}`);
-        buildWithBuiltIn(root, filepath).then((result) => {
-          response.setHeader('Content-Type', result.mimeType);
+        console.log(chalk.yellow(`Compiling: ${filepath}`));
+        buildWithBuiltIn(root, filepath, ignoreStyleCache).then((result) => {
+          response.setHeader(translations[ext][0], translations[ext][1]);
           response.send(result.code);
         }).catch((err) => {
           return next();

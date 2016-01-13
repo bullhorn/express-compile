@@ -61,10 +61,19 @@ export default class CompilerHost {
    *                                         alternate fallback is the compiler for
    *                                         'text/plain', which is guaranteed to be
    *                                         present.
+   *
+   * @param  {boolean} ignoreStyleCache  (optional) flag to disable caching of style files
    */
-  constructor(rootCacheDir, compilers, fileChangeCache, readOnlyMode, fallbackCompiler = null) {
+  constructor(rootCacheDir, compilers, fileChangeCache, readOnlyMode, fallbackCompiler = null, ignoreStyleCache = false) {
     let compilersByMimeType = _.assign({}, compilers);
-    _.assign(this, {rootCacheDir, compilersByMimeType, fileChangeCache, readOnlyMode, fallbackCompiler});
+    _.assign(this, {
+      rootCacheDir,
+      compilersByMimeType,
+      fileChangeCache,
+      readOnlyMode,
+      fallbackCompiler,
+      ignoreStyleCache
+    });
     this.appRoot = this.fileChangeCache.appRoot;
 
     this.cachesForCompilers = _.reduce(Object.keys(compilersByMimeType), (acc, x) => {
@@ -73,7 +82,7 @@ export default class CompilerHost {
 
       acc.set(
         compiler,
-        CompileCache.createFromCompiler(rootCacheDir, compiler, fileChangeCache, readOnlyMode));
+        CompileCache.createFromCompiler(rootCacheDir, compiler, fileChangeCache, readOnlyMode, ignoreStyleCache));
       return acc;
     }, new Map());
   }

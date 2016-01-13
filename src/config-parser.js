@@ -99,13 +99,13 @@ export function init(appRoot, mainModule, productionMode = null) {
  *
  * @private
  */
-export function createCompilerHostFromConfiguration(info) {
+export function createCompilerHostFromConfiguration(info, ignoreStyleCache = false) {
   let compilers = createCompilers();
   let rootCacheDir = info.rootCacheDir || calculateDefaultCompileCacheDirectory();
 
   d(`Creating CompilerHost: ${JSON.stringify(info)}, rootCacheDir = ${rootCacheDir}`);
   let fileChangeCache = new FileChangedCache(info.appRoot);
-  let ret = new CompilerHost(rootCacheDir, compilers, fileChangeCache, false, compilers['text/plain']);
+  let ret = new CompilerHost(rootCacheDir, compilers, fileChangeCache, false, compilers['text/plain'], ignoreStyleCache);
 
   _.each(Object.keys(info.options || {}), (x) => {
     let opts = info.options[x];
@@ -222,7 +222,7 @@ export async function createCompilerHostFromProjectRoot(rootDir, rootCacheDir = 
   return await createCompilerHostFromBabelRc(path.join(rootDir, 'package.json'), rootCacheDir);
 }
 
-export function createCompilerHostFromBabelRcSync(file, rootCacheDir = null) {
+export function createCompilerHostFromBabelRcSync(file, rootCacheDir = null, ignoreStyleCache = false) {
   let info = JSON.parse(fs.readFileSync(file, 'utf8'));
 
   // package.json
@@ -241,7 +241,7 @@ export function createCompilerHostFromBabelRcSync(file, rootCacheDir = null) {
       appRoot: path.dirname(file),
       options: getDefaultConfiguration(),
       rootCacheDir
-    });
+    }, ignoreStyleCache);
   }
 
   return createCompilerHostFromConfiguration({
@@ -250,10 +250,10 @@ export function createCompilerHostFromBabelRcSync(file, rootCacheDir = null) {
       'application/javascript': info
     },
     rootCacheDir
-  });
+  }, ignoreStyleCache);
 }
 
-export function createCompilerHostFromConfigFileSync(file, rootCacheDir = null) {
+export function createCompilerHostFromConfigFileSync(file, rootCacheDir = null, ignoreStyleCache = false) {
   let info = JSON.parse(fs.readFileSync(file, 'utf8'));
 
   if ('env' in info) {
@@ -265,24 +265,24 @@ export function createCompilerHostFromConfigFileSync(file, rootCacheDir = null) 
     appRoot: path.dirname(file),
     options: info,
     rootCacheDir
-  });
+  }, ignoreStyleCache);
 }
 
-export function createCompilerHostFromProjectRootSync(rootDir, rootCacheDir = null) {
+export function createCompilerHostFromProjectRootSync(rootDir, rootCacheDir = null, ignoreStyleCache = false) {
   let compilerc = path.join(rootDir, '.compilerc');
   if (statSyncNoException(compilerc)) {
     d(`Found a .compilerc at ${compilerc}, using it`);
-    return createCompilerHostFromConfigFileSync(compilerc, rootCacheDir);
+    return createCompilerHostFromConfigFileSync(compilerc, rootCacheDir, ignoreStyleCache);
   }
 
   let babelrc = path.join(rootDir, '.babelrc');
   if (statSyncNoException(babelrc)) {
     d(`Found a .babelrc at ${babelrc}, using it`);
-    return createCompilerHostFromBabelRcSync(babelrc, rootCacheDir);
+    return createCompilerHostFromBabelRcSync(babelrc, rootCacheDir, ignoreStyleCache);
   }
 
   d(`Using package.json or default parameters at ${rootDir}`);
-  return createCompilerHostFromBabelRcSync(path.join(rootDir, 'package.json'), rootCacheDir);
+  return createCompilerHostFromBabelRcSync(path.join(rootDir, 'package.json'), rootCacheDir, ignoreStyleCache);
 }
 
 /**

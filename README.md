@@ -25,7 +25,7 @@ app.use(Compiler({
     cwd: 'public',
     paths: ['public/**/*'],
     ignore: ['public/node_modules/**/*'],
-    disableStyleCache: true
+    ignoreStyleCache: true
 }));
 app.use(express.static('/public'));
 
