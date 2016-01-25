@@ -1,6 +1,6 @@
 {
   "name": "express-compile",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "description": "Supporting package to compile JS and CSS in Express applications",
   "repository": {
     "type": "git",
@@ -50,8 +50,6 @@
     "babel-cli": "^6.3.17",
     "babel-eslint": "^5.0.0-beta6",
     "babel-preset-es2015": "^6.3.13",
-    "babel-preset-react": "^6.3.13",
-    "babel-preset-stage-0": "^6.3.13",
     "babel-register": "^6.3.13",
     "chai": "^3.4.1",
     "chai-as-promised": "^5.2.0",
