@@ -24,6 +24,9 @@
   "bugs": {
     "url": "https://github.com/bullhorn/express-compile/issues"
   },
+  "publishConfig":{
+    "registry": "https://registry.npmjs.org"
+  },
   "homepage": "https://github.com/bullhorn/express-compile",
   "scripts": {
     "doc": "esdoc -c ./esdoc.json",
