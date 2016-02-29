@@ -23,8 +23,14 @@ function buildWithBuiltIn(root, source, ignoreStyleCache) {
       let result = compilerHost.compileSync(source);
       resolve(result);
     } catch (e) {
+      console.log();
+      console.error(`!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!`);
       console.error(`Failed to compile file: ${source}`);
-      console.error(e.message);
+      if (e.message) {
+        console.error(e.message);
+      }
+      console.error(`!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!`);
+      console.log();
       reject(e);
     }
   });
