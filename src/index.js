@@ -7,7 +7,7 @@ import CompilerHost from './compiler-host';
 import FileChangedCache from './file-change-cache';
 import CompileCache from './compile-cache';
 
-export * from './compiler';
+export * as compiler from './compiler';
 
 export default _.assign({},
   configParser,

@@ -1,6 +1,6 @@
 {
   "name": "express-compile",
-  "version": "3.0.7",
+  "version": "3.0.8",
   "description": "Supporting package to compile JS and CSS in Express applications",
   "repository": {
     "type": "git",
