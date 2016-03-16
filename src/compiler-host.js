@@ -4,6 +4,7 @@ import fs from 'fs';
 import zlib from 'zlib';
 import path from 'path';
 import {pfs, pzlib} from './promise';
+import chalk from 'chalk';
 
 import {forAllFiles, forAllFilesSync} from './for-all-files';
 import CompileCache from './compile-cache';
@@ -18,7 +19,8 @@ const finalForms = {
   'application/javascript': true,
   'text/html': true,
   'text/css': true,
-  'image/svg+xml': true
+  'image/svg+xml': true,
+  'application/json': true
 };
 
 /**
@@ -246,7 +248,7 @@ export default class CompilerHost {
     if (!compiler) {
       compiler = this.fallbackCompiler;
 
-      let { code, binaryData, mimeType } = await compiler.get(filePath);
+      let {code, binaryData, mimeType} = await compiler.get(filePath);
       return {code: code || binaryData, mimeType};
     }
 
@@ -475,7 +477,7 @@ export default class CompilerHost {
     if (!compiler) {
       compiler = this.fallbackCompiler;
 
-      let { code, binaryData, mimeType } = compiler.getSync(filePath);
+      let {code, binaryData, mimeType} = compiler.getSync(filePath);
       return {code: code || binaryData, mimeType};
     }
 
@@ -521,6 +523,7 @@ export default class CompilerHost {
   }
 
   compileUncachedSync(filePath, hashInfo, compiler) {
+    console.log(chalk.yellow(`Compiling ${filePath}`));
     let inputMimeType = mimeTypes.lookup(filePath);
 
     if (hashInfo.isFileBinary) {

@@ -11,9 +11,5 @@ export * from './compiler';
 
 export default _.assign({},
   configParser,
-  {
-    CompilerHost,
-    FileChangedCache,
-    CompileCache
-  }
+  {CompilerHost, FileChangedCache, CompileCache}
 );

@@ -88,7 +88,7 @@ export function initializeRendererProcess(readOnlyMode) {
     compilerHost = CompilerHost.createReadonlyFromConfigurationSync(rootCacheDir, appRoot);
   } else {
     d(`Setting up express-compile in development mode with cache dir: ${rootCacheDir}`);
-    const { createCompilers } = require('./config-parser');
+    const {createCompilers} = require('./config-parser');
     const compilersByMimeType = createCompilers();
 
     compilerHost = CompilerHost.createFromConfigurationSync(rootCacheDir, appRoot, compilersByMimeType);
@@ -128,13 +128,14 @@ export function initializeProtocolHook(compilerHost) {
       return;
     }
 
-    // This is a protocol-relative URL that has gone pear-shaped in Express,
+    // This is a protocol-relative URL that has gone pear-shaped in Electron,
     // let's rewrite it
     if (uri.host && uri.host.length > 1) {
       //let newUri = request.url.replace(/^file:/, "https:");
       // TODO: Jump off this bridge later
       d(`TODO: Found bogus protocol-relative URL, can't fix it up!!`);
       finish(-2);
+      return;
     }
 
     let filePath = decodeURIComponent(uri.pathname);
@@ -146,6 +147,29 @@ export function initializeProtocolHook(compilerHost) {
 
     // NB: Special-case files coming from atom.asar or node_modules
     if (filePath.match(/[\/\\]atom.asar/) || filePath.match(/[\/\\]node_modules/)) {
+      // NBs on NBs: If we're loading an HTML file from node_modules, we still have
+      // to do the HTML document rigging
+      if (filePath.match(/\.html?$/i)) {
+        let riggedContents = null;
+        fs.readFile(filePath, 'utf8', (err, contents) => {
+          if (err) {
+            if (err.errno === 34) {
+              finish(-6); // net::ERR_FILE_NOT_FOUND
+              return;
+            } else {
+              finish(-2); // net::FAILED
+              return;
+            }
+          }
+
+          riggedContents = rigHtmlDocumentToInitializeElectronCompile(contents);
+          finish({data: new Buffer(riggedContents), mimeType: 'text/html'});
+          return;
+        });
+
+        return;
+      }
+
       requestFileJob(filePath, finish);
       return;
     }

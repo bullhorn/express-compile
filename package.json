@@ -1,6 +1,6 @@
 {
   "name": "express-compile",
-  "version": "3.0.6",
+  "version": "3.0.7",
   "description": "Supporting package to compile JS and CSS in Express applications",
   "repository": {
     "type": "git",
@@ -39,34 +39,35 @@
   },
   "main": "lib/index.js",
   "dependencies": {
-    "babel-polyfill": "^6.3.14",
+    "babel-polyfill": "^6.7.2",
     "btoa": "^1.1.2",
     "debug": "^2.2.0",
-    "lodash": "^3.10.1",
-    "mime-types": "^2.1.8",
-    "minimatch": "^2.0.10",
+    "lodash": "^4.6.1",
+    "lru-cache": "^4.0.0",
+    "mime-types": "^2.1.10",
+    "minimatch": "^3.0.0",
     "mkdirp": "^0.5.1",
     "pify": "^2.3.0",
-    "yargs": "^3.31.0"
+    "rimraf": "^2.5.2",
+    "yargs": "^4.3.1"
   },
   "devDependencies": {
-    "babel-cli": "^6.3.17",
-    "babel-eslint": "^5.0.0-beta6",
-    "babel-plugin-transform-runtime": "^6.5.2",
-    "babel-preset-es2015": "^6.3.13",
-    "babel-preset-react": "^6.3.13",
-    "babel-preset-stage-0": "^6.3.13",
-    "babel-register": "^6.3.13",
-    "chai": "^3.4.1",
+    "babel-cli": "^6.6.5",
+    "babel-eslint": "^5.0.0",
+    "babel-plugin-transform-runtime": "^6.6.0",
+    "babel-preset-es2015": "^6.6.0",
+    "babel-preset-stage-0": "^6.5.0",
+    "babel-register": "^6.7.2",
+    "chai": "^3.5.0",
     "chai-as-promised": "^5.2.0",
     "chalk": "^1.1.1",
-    "cheerio": "^0.19.0",
-    "esdoc": "^0.4.3",
+    "cheerio": "^0.20.0",
+    "esdoc": "^0.4.6",
     "esdoc-es7-plugin": "0.0.3",
     "esdoc-plugin-async-to-sync": "^0.5.0",
-    "eslint": "^1.10.3",
-    "express-compilers": "^3.0.0",
-    "mocha": "^2.3.4",
-    "rimraf": "^2.5.0"
+    "eslint": "^2.4.0",
+    "express-compilers": "^3.0.6",
+    "mocha": "^2.4.5",
+    "rimraf": "^2.5.2"
   }
 }

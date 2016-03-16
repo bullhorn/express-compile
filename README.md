@@ -13,7 +13,15 @@ For CSS:
 * LESS
 * Sass/SCSS
 
-### How does it work?
+For HTML:
+
+* Jade
+
+For JSON:
+
+* CSON
+
+### How does it work? (Slightly Harder Way)
 
 Put this at the top of your Express app:
 
@@ -29,6 +37,23 @@ app.use(Compiler({
 }));
 app.use(express.static('/public'));
 
+```
+
+### I did it, now what?
+
+From then on, you can now simply include files directly in your HTML, no need for cross-compilation:
+
+```html
+<head>
+  <script src="main.coffee"></script>
+  <link rel="stylesheet" href="main.less" />
+</head>
+```
+
+or just require them in:
+
+```js
+require('./mylib')   // mylib.ts
 ```
 
 ### Something isn't working / I'm getting weird errors
@@ -75,7 +100,7 @@ If you've got a `.babelrc` and that's all you want to customize, you can simply 
     },
     "production": {
       "application/javascript": {
-        "presets": ["stage-0", "es2015", "react"]
+        "presets": ["stage-0", "es2015", "react"],
         "sourceMaps": "none"
       }
     }

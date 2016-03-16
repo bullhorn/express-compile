@@ -19,7 +19,7 @@
   "package": "./package.json",
   "coverage": true,
   "includeSource": true,
-  "title": "express-compiler",
+  "title": "electron-compilers",
   "plugins": [
     {
       "name": "esdoc-es7-plugin"

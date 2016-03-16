@@ -4,6 +4,7 @@ import './babel-maybefill';
 import path from 'path';
 import mkdirp from 'mkdirp';
 import _ from 'lodash';
+import rimraf from 'rimraf';
 
 import {createCompilerHostFromProjectRoot} from './config-parser';
 import {forAllFiles} from './for-all-files';
@@ -21,6 +22,7 @@ process.on('uncaughtException', (e) => {
 async function main(appDir, sourceDirs) {
   let compilerHost = null;
   let rootCacheDir = path.join(appDir, '.cache');
+  rimraf.sync(rootCacheDir);
   mkdirp.sync(rootCacheDir);
 
   if (process.env.NODE_ENV !== 'production') {
@@ -59,6 +61,7 @@ const yargs = require('yargs')
   .usage('Usage: express-compile --appdir [root-app-dir] paths...')
   .alias('a', 'appdir')
   .describe('a', 'The top-level application directory (i.e. where your package.json is)')
+  .default('a', process.cwd())
   .help('h')
   .alias('h', 'help')
   .epilog('Copyright 2015');
@@ -71,7 +74,7 @@ if (!argv._ || argv._.length < 1) {
 }
 
 const sourceDirs = argv._;
-const appDir = argv.a || process.env.PWD;
+const appDir = argv.a;
 
 main(appDir, sourceDirs)
   .then(() => process.exit(0))

@@ -8,8 +8,6 @@ import mimeTypes from 'mime-types';
 
 const pfs = pify(fs);
 
-const d = require('debug')('express-compile:compiler-valid-invalid');
-
 let allFixtureFiles = _.filter(
   fs.readdirSync(path.join(__dirname, '..', 'test', 'fixtures')),
   (x) => x.match(/invalid\./i));
@@ -24,10 +22,14 @@ let mimeTypesToTest = _.reduce(allFixtureFiles, (acc, x) => {
 
 const expectedMimeTypeSpecialCases = {
   'text/less': 'text/css',
-  'text/scss': 'text/css',
-  'text/sass': 'text/css',
-  'text/jade': 'text/html'
+  'text/jade': 'text/html',
+  'text/cson': 'application/json'
 };
+
+const mimeTypesWithoutSourceMapSupport = [
+  'text/jade',
+  'text/cson'
+];
 
 for (let mimeType of mimeTypesToTest) {
   let klass = global.compilersByMimeType[mimeType];
@@ -52,14 +54,15 @@ for (let mimeType of mimeTypesToTest) {
       let result = await this.fixture.compile(source, input, ctx);
       let expectedMimeType = expectedMimeTypeSpecialCases[mimeType] || 'application/javascript';
 
-      d(result.code);
       expect(result.mimeType).to.equal(expectedMimeType);
 
-      // NB: Jade doesn't do source maps
-      if (mimeType !== 'text/jade') {
+      // NB: Some compilers don't do source maps
+      if (!mimeTypesWithoutSourceMapSupport.includes(mimeType)) {
         let lines = result.code.split('\n');
         expect(_.any(lines, (x) => x.match(/sourceMappingURL=/))).to.be.ok;
       }
+
+      expect(typeof(result.code)).to.equal('string');
     });
 
     it(`should fail the invalid ${mimeType} file`, async function () {

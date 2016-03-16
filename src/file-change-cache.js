@@ -195,6 +195,10 @@ export default class FileChangedCache {
       cacheKey = cacheKey.replace(this.originalAppRoot, '');
     }
 
+    if (this.realAppRoot) {
+      cacheKey = cacheKey.replace(this.realAppRoot, '');
+    }
+
     let cacheEntry = this.changeCache[cacheKey];
 
     if (this.failOnCacheMiss) {
@@ -291,12 +295,12 @@ export default class FileChangedCache {
 
 
   /**
-   * Determines whether a path is in node_modules or the Express init code
+   * Determines whether a path is in node_modules
    *
    * @private
    */
   static isInNodeModules(filePath) {
-    return !!(filePath.match(/node_modules[\\\/]/i) || filePath.match(/atom\.asar/));
+    return !!(filePath.match(/node_modules[\\\/]/i));
   }
 
 

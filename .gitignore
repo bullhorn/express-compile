@@ -27,7 +27,7 @@ build/Release
 node_modules
 
 lib
-docs
 test-dist
+docs
 
 .DS_Store

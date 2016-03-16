@@ -4,6 +4,7 @@ import zlib from 'zlib';
 import createDigestForObject from './digest-for-object';
 import {pfs, pzlib} from './promise';
 import mkdirp from 'mkdirp';
+import chalk from 'chalk';
 
 const d = require('debug')('express-compile:compile-cache');
 
@@ -238,7 +239,9 @@ export default class CompileCache {
         mimeType = result.mimeType;
         dependentFiles = result.dependentFiles;
       }
+      console.log(chalk.yellow(`Fetching ${filePath} from cache`));
     } catch (e) {
+      console.log(chalk.red(`Failed to read cache for ${filePath}`));
       d(`Failed to read cache for ${filePath}`);
     }
 

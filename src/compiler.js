@@ -65,7 +65,6 @@ export function Compiler(options = {}) {
         });
 
       if (ext && ext.length && check && !ignored) {
-        console.log(chalk.yellow(`Compiling: ${filepath}`));
         buildWithBuiltIn(root, filepath, ignoreStyleCache).then((result) => {
           response.setHeader(translations[ext][0], translations[ext][1]);
           response.send(result.code);

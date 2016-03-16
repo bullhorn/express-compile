@@ -9,7 +9,7 @@ import {pfs} from './promise';
  * @private
  */
 export function forAllFiles(rootDirectory, func, ...args) {
-  let rec = async (dir) => {
+  let rec = async(dir) => {
     let entries = await pfs.readdir(dir);
 
     for (let name of entries) {

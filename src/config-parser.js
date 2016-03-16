@@ -6,7 +6,7 @@ import {pfs} from './promise';
 
 import FileChangedCache from './file-change-cache';
 import CompilerHost from './compiler-host';
-import { initializeProtocolHook } from './protocol-hook';
+import {initializeProtocolHook} from './protocol-hook';
 import registerRequireExtension from './require-hook';
 
 const d = require('debug')('express-compile:config-parser');
@@ -42,7 +42,7 @@ export function initializeGlobalHooks(compilerHost) {
   registerRequireExtension(compilerHost);
 
   if ('type' in process && process.type === 'browser') {
-    const { app } = require('express');
+    const {app} = require('express');
 
     let protoify = function () {
       initializeProtocolHook(compilerHost);
