@@ -1,6 +1,6 @@
 {
   "name": "express-compile",
-  "version": "3.0.8",
+  "version": "3.0.9",
   "description": "Supporting package to compile JS and CSS in Express applications",
   "repository": {
     "type": "git",
@@ -37,7 +37,7 @@
   "bin": {
     "express-compile": "lib/cli.js"
   },
-  "main": "lib/index.js",
+  "main": "lib/compiler.js",
   "dependencies": {
     "babel-polyfill": "^6.7.2",
     "btoa": "^1.1.2",
