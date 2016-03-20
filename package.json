@@ -1,6 +1,6 @@
 {
   "name": "express-compile",
-  "version": "3.0.13",
+  "version": "3.0.14",
   "description": "Supporting package to compile JS and CSS in Express applications",
   "repository": {
     "type": "git",
@@ -31,7 +31,7 @@
   "scripts": {
     "doc": "esdoc -c ./esdoc.json",
     "compile": "git clean -xdf lib && babel -d lib/ src",
-    "prepublish": "npm run compile",
+    "prepublish": "npm run compile && npm run doc",
     "test": "mocha --compilers js:babel-register test/*.js"
   },
   "bin": {

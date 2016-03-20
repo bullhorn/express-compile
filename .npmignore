@@ -1,1 +1,8 @@
-test-dist/
+test/
+src/
+.babelrc
+.editorconfig
+.eslintrc
+.gitignore
+esdoc.json
+node_modules/
