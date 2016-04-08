@@ -2,7 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import zlib from 'zlib';
 import createDigestForObject from './digest-for-object';
-import {pfs, pzlib} from './promise';
+import { pfs, pzlib } from './promise';
 import mkdirp from 'mkdirp';
 import chalk from 'chalk';
 
@@ -131,7 +131,7 @@ export default class CompileCache {
       d(`Failed to read cache for ${filePath}, looked in ${cacheFile}: ${e.message}`);
     }
 
-    return {hashInfo, code, mimeType, binaryData, dependentFiles};
+    return { hashInfo, code, mimeType, binaryData, dependentFiles };
   }
 
 
@@ -158,9 +158,9 @@ export default class CompileCache {
 
       if (hashInfo.isFileBinary) {
         buf = await pzlib.gzip(codeOrBinaryData);
-        await pfs.writeFile(target + '.info', JSON.stringify({mimeType, dependentFiles}), 'utf8');
+        await pfs.writeFile(target + '.info', JSON.stringify({ mimeType, dependentFiles }), 'utf8');
       } else {
-        buf = await pzlib.gzip(new Buffer(JSON.stringify({code: codeOrBinaryData, mimeType, dependentFiles})));
+        buf = await pzlib.gzip(new Buffer(JSON.stringify({ code: codeOrBinaryData, mimeType, dependentFiles })));
       }
 
       await pfs.writeFile(target, buf);
@@ -195,7 +195,7 @@ export default class CompileCache {
     let cacheResult = await this.get(filePath);
     if (cacheResult.code || cacheResult.binaryData) return cacheResult;
 
-    let result = await fetcher(filePath, cacheResult.hashInfo) || {hashInfo: cacheResult.hashInfo};
+    let result = await fetcher(filePath, cacheResult.hashInfo) || { hashInfo: cacheResult.hashInfo };
 
     if (result.mimeType && !cacheResult.hashInfo.isInNodeModules) {
       d(`Cache miss: saving out info for ${filePath}`);
@@ -245,7 +245,7 @@ export default class CompileCache {
       d(`Failed to read cache for ${filePath}`);
     }
 
-    return {hashInfo, code, mimeType, binaryData, dependentFiles};
+    return { hashInfo, code, mimeType, binaryData, dependentFiles };
   }
 
   saveSync(hashInfo, codeOrBinaryData, mimeType, dependentFiles) {
@@ -258,9 +258,9 @@ export default class CompileCache {
 
       if (hashInfo.isFileBinary) {
         buf = zlib.gzipSync(codeOrBinaryData);
-        fs.writeFileSync(target + '.info', JSON.stringify({mimeType, dependentFiles}), 'utf8');
+        fs.writeFileSync(target + '.info', JSON.stringify({ mimeType, dependentFiles }), 'utf8');
       } else {
-        buf = zlib.gzipSync(new Buffer(JSON.stringify({code: codeOrBinaryData, mimeType, dependentFiles})));
+        buf = zlib.gzipSync(new Buffer(JSON.stringify({ code: codeOrBinaryData, mimeType, dependentFiles })));
       }
 
       fs.writeFileSync(target, buf);
@@ -271,7 +271,7 @@ export default class CompileCache {
     let cacheResult = this.getSync(filePath);
     if (cacheResult.code || cacheResult.binaryData) return cacheResult;
 
-    let result = fetcher(filePath, cacheResult.hashInfo) || {hashInfo: cacheResult.hashInfo};
+    let result = fetcher(filePath, cacheResult.hashInfo) || { hashInfo: cacheResult.hashInfo };
 
     if (result.mimeType && !cacheResult.hashInfo.isInNodeModules) {
       d(`Cache miss: saving out info for ${filePath}`);

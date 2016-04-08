@@ -3,7 +3,7 @@ import path from 'path';
 import mkdirp from 'mkdirp';
 import _ from 'lodash';
 import minimatch from 'minimatch';
-import {createCompilerHostFromProjectRootSync} from './config-parser';
+import { createCompilerHostFromProjectRootSync } from './config-parser';
 import chalk from 'chalk';
 
 function buildWithBuiltIn(root, source, ignoreStyleCache) {
@@ -46,7 +46,7 @@ let translations = {
 };
 
 export function Compiler(options = {}) {
-  let {root, paths, ignore, cwd, ignoreStyleCache} = options;
+  let { root, paths, ignore, cwd, ignoreStyleCache } = options;
 
   return function (request, response, next) {
     if ('GET' != request.method.toUpperCase() && 'HEAD' != request.method.toUpperCase()) {

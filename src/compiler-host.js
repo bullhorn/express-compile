@@ -317,7 +317,7 @@ export default class CompilerHost {
     let ctx = {};
     let code = hashInfo.sourceCode || await pfs.readFile(filePath, 'utf8');
 
-    if (!(await compiler.shouldCompileFile(code, ctx))) {
+    if (!(await compiler.shouldCompileFile(filePath, ctx))) {
       d(`Compiler returned false for shouldCompileFile: ${filePath}`);
       return {code, mimeType: mimeTypes.lookup(filePath), dependentFiles: []};
     }
@@ -537,7 +537,7 @@ export default class CompilerHost {
     let ctx = {};
     let code = hashInfo.sourceCode || fs.readFileSync(filePath, 'utf8');
 
-    if (!(compiler.shouldCompileFileSync(code, ctx))) {
+    if (!(compiler.shouldCompileFileSync(filePath, ctx))) {
       d(`Compiler returned false for shouldCompileFile: ${filePath}`);
       return {code, mimeType: mimeTypes.lookup(filePath), dependentFiles: []};
     }

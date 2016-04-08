@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import fs from 'fs';
 import path from 'path';
-import {pfs} from './promise';
+import { pfs } from './promise';
 
 /**
  * Invokes a method on all files in a directory recursively.

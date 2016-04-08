@@ -12,7 +12,7 @@ export default class ReadOnlyCompiler {
    * @private
    */
   constructor(name, compilerVersion, compilerOptions, inputMimeTypes) {
-    _.assign(this, {name, compilerVersion, compilerOptions, inputMimeTypes});
+    _.assign(this, { name, compilerVersion, compilerOptions, inputMimeTypes });
   }
 
   async shouldCompileFile() {

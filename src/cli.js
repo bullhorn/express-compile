@@ -6,8 +6,8 @@ import mkdirp from 'mkdirp';
 import _ from 'lodash';
 import rimraf from 'rimraf';
 
-import {createCompilerHostFromProjectRoot} from './config-parser';
-import {forAllFiles} from './for-all-files';
+import { createCompilerHostFromProjectRoot } from './config-parser';
+import { forAllFiles } from './for-all-files';
 
 process.on('unhandledRejection', (e) => {
   d(e.message || e);
@@ -39,7 +39,7 @@ async function main(appDir, sourceDirs) {
     throw e;
   }
 
-  await Promise.all(_.map(sourceDirs, (dir) => forAllFiles(dir, async (f) => {
+  await Promise.all(_.map(sourceDirs, (dir) => forAllFiles(dir, async(f) => {
     try {
       d(`Starting compilation for ${f}`);
       await compilerHost.compile(f);

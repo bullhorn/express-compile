@@ -1,7 +1,7 @@
 import fs from 'fs';
 import zlib from 'zlib';
 import crypto from 'crypto';
-import {pfs, pzlib} from './promise';
+import { pfs, pzlib } from './promise';
 import _ from 'lodash';
 import sanitizeFilePath from './sanitize-paths';
 
@@ -124,7 +124,7 @@ export default class FileChangedCache {
       delete this.changeCache.cacheEntry;
     }
 
-    let {digest, sourceCode, binaryData} = await this.calculateHashForFile(absoluteFilePath);
+    let { digest, sourceCode, binaryData } = await this.calculateHashForFile(absoluteFilePath);
 
     let info = {
       hash: digest,
@@ -134,13 +134,13 @@ export default class FileChangedCache {
       isFileBinary: !!binaryData
     };
 
-    this.changeCache[cacheKey] = {ctime, size, info};
+    this.changeCache[cacheKey] = { ctime, size, info };
     d(`Cache entry for ${cacheKey}: ${JSON.stringify(this.changeCache[cacheKey])}`);
 
     if (binaryData) {
-      return _.extend({binaryData}, info);
+      return _.extend({ binaryData }, info);
     } else {
-      return _.extend({sourceCode}, info);
+      return _.extend({ sourceCode }, info);
     }
   }
 
@@ -151,7 +151,7 @@ export default class FileChangedCache {
    * @return {Object}
    */
   getSavedData() {
-    return {changeCache: this.changeCache, appRoot: this.appRoot};
+    return { changeCache: this.changeCache, appRoot: this.appRoot };
   }
 
   /**
@@ -174,13 +174,13 @@ export default class FileChangedCache {
 
     if (!encoding) {
       let digest = crypto.createHash('sha1').update(buf).digest('hex');
-      return {sourceCode: null, digest, binaryData: buf};
+      return { sourceCode: null, digest, binaryData: buf };
     }
 
     let sourceCode = await pfs.readFile(absoluteFilePath, encoding);
     let digest = crypto.createHash('sha1').update(sourceCode, 'utf8').digest('hex');
 
-    return {sourceCode, digest, binaryData: null};
+    return { sourceCode, digest, binaryData: null };
   }
 
   getHashForPathSync(absoluteFilePath) {
@@ -225,7 +225,7 @@ export default class FileChangedCache {
       delete this.changeCache.cacheEntry;
     }
 
-    let {digest, sourceCode, binaryData} = this.calculateHashForFileSync(absoluteFilePath);
+    let { digest, sourceCode, binaryData } = this.calculateHashForFileSync(absoluteFilePath);
 
     let info = {
       hash: digest,
@@ -235,13 +235,13 @@ export default class FileChangedCache {
       isFileBinary: !!binaryData
     };
 
-    this.changeCache[cacheKey] = {ctime, size, info};
+    this.changeCache[cacheKey] = { ctime, size, info };
     d(`Cache entry for ${cacheKey}: ${JSON.stringify(this.changeCache[cacheKey])}`);
 
     if (binaryData) {
-      return _.extend({binaryData}, info);
+      return _.extend({ binaryData }, info);
     } else {
-      return _.extend({sourceCode}, info);
+      return _.extend({ sourceCode }, info);
     }
   }
 
@@ -258,13 +258,13 @@ export default class FileChangedCache {
 
     if (!encoding) {
       let digest = crypto.createHash('sha1').update(buf).digest('hex');
-      return {sourceCode: null, digest, binaryData: buf};
+      return { sourceCode: null, digest, binaryData: buf };
     }
 
     let sourceCode = fs.readFileSync(absoluteFilePath, encoding);
     let digest = crypto.createHash('sha1').update(sourceCode, 'utf8').digest('hex');
 
-    return {sourceCode, digest, binaryData: null};
+    return { sourceCode, digest, binaryData: null };
   }
 
 

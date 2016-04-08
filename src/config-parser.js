@@ -2,12 +2,10 @@ import _ from 'lodash';
 import fs from 'fs';
 import path from 'path';
 import mkdirp from 'mkdirp';
-import {pfs} from './promise';
+import { pfs } from './promise';
 
 import FileChangedCache from './file-change-cache';
 import CompilerHost from './compiler-host';
-import {initializeProtocolHook} from './protocol-hook';
-import registerRequireExtension from './require-hook';
 
 const d = require('debug')('express-compile:config-parser');
 
@@ -26,35 +24,6 @@ function statSyncNoException(fsPath) {
     return null;
   }
 }
-
-/**
- * Initialize the global hooks (protocol hook for file:, node.js hook)
- * independent of initializing the compiler. This method is usually called by
- * init instead of directly
- *
- * @param {CompilerHost} compilerHost  The compiler host to use.
- *
- */
-export function initializeGlobalHooks(compilerHost) {
-  let globalVar = (global || window);
-  globalVar.globalCompilerHost = compilerHost;
-
-  registerRequireExtension(compilerHost);
-
-  if ('type' in process && process.type === 'browser') {
-    const {app} = require('express');
-
-    let protoify = function () {
-      initializeProtocolHook(compilerHost);
-    };
-    if (app.isReady()) {
-      protoify();
-    } else {
-      app.on('ready', protoify);
-    }
-  }
-}
-
 
 /**
  * Initialize express-compile and set it up, either for development or
@@ -88,7 +57,6 @@ export function init(appRoot, mainModule, productionMode = null) {
     compilerHost = createCompilerHostFromProjectRootSync(appRoot);
   }
 
-  initializeGlobalHooks(compilerHost);
   require.main.require(mainModule);
 }
 

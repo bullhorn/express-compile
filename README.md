@@ -1,6 +1,6 @@
 ## express-compile
 
-express-compile is middleware that compiles JS and CSS on the fly within your express application.  This project is based off the express-compile [express-compile](https://github.com/paulcbetts/express-compile) project and uses the same compilers.
+express-compile is middleware that compiles JS and CSS on the fly within your express application.  This project is based off [electron-compile](https://github.com/electron/electron-compile) project and uses the same compilers.
 
 For JavaScript:
 
@@ -113,6 +113,7 @@ The opening Object is a list of MIME Types, and options passed to the compiler i
 * Babel - http://babeljs.io/docs/usage/options
 * CoffeeScript - http://coffeescript.org/documentation/docs/coffee-script.html#section-5
 * TypeScript - https://github.com/Microsoft/TypeScript/blob/v1.5.0-beta/bin/typescriptServices.d.ts#L1076
+* LESS - http://lesscss.org/usage/index.html#command-line-usage-options
 * LESS - http://lesscss.org/usage/index.html#command-line-usage-options
 * Jade - http://jade-lang.com/api
 

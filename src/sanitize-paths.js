@@ -2,7 +2,7 @@ import fs from 'fs';
 import LRUCache from 'lru-cache';
 
 const d = require('debug')('express-compile:sanitize-paths');
-const realpathCache = LRUCache({max: 32});
+const realpathCache = LRUCache({ max: 32 });
 
 function cachedRealpath(p) {
   let ret = realpathCache.get(p);
